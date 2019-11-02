@@ -1,45 +1,71 @@
-#include "pitches.h"
+#include <Arduino.h>
+
 #include "button.h"
 #include "buzzer.h"
+#include "pitches.h"
 
-#define PIN_BUZZER 6
-#define PIN_BUTTON_OFF 5
+#define BUZZER1 6
+#define BUZZER2 7
+#define BUTTON 5
 
-Button buttonOff(PIN_BUTTON_OFF);
-Buzzer buzzer(PIN_BUZZER);
+Button buttonOff(BUTTON);
+int countBuzzer = 2;
+Buzzer buzzers[2] = {
+    Buzzer(BUZZER1),
+    Buzzer(BUZZER2)
+};
 
+int notes1[] = {NOTE_A4, NOTE_SILENCE, NOTE_G4, NOTE_SILENCE};
+double durations1[] = {8, 1, 4, 1};
+int melodyLength1 = 4;
+int f = 0;
+int countMelody = 2;
 
-int notes[] = {NOTE_G3, NOTE_SILENCE, NOTE_G3, NOTE_SILENCE, NOTE_G3, NOTE_SILENCE, NOTE_DS3, NOTE_SILENCE};
-double durations[] = {8, 8, 1, 8, 1, 8, 1, 24};
-int melodyLength = 8;
+int notes2[] = {NOTE_E4, NOTE_E4, REST, NOTE_E4, 
+  REST, NOTE_C4, NOTE_E4, REST,
+  NOTE_A4, REST, REST, NOTE_G3, REST,
+  NOTE_C4, REST, REST, NOTE_G3,
+  REST, NOTE_E3, REST,
+  REST, NOTE_A3, REST, NOTE_B3,   
+  REST, NOTE_AS3, NOTE_A3, REST,
+  NOTE_G3, NOTE_E4, NOTE_G4,
+  NOTE_A4, REST, NOTE_F4, NOTE_G4, 
+  REST, NOTE_E4, REST, NOTE_C4, 
+  NOTE_G4, NOTE_B3, REST};
+double durations2[] = {
+  4, 4, 4, 4,
+  4, 4, 4, 4,
+  8, 2, 4, 2, 2,
+  4, 4, 4, 4,
+  2, 4, 4,
+  8, 4, 4, 4,  
+  4, 4, 4, 4,
+  8, 2, 4,
+  4, 4, 4, 4,
+  4, 4, 4, 4, 
+  4, 4, 2
+  };
+int melodyLength2 = 42;
+
 
 void setup() {
-    buzzer.setMelody(notes, durations, melodyLength);
-    buzzer.turnSoundOn();
+  for (int i = 0; i < countBuzzer; i++)
+  {
+    buzzers[i].setMelody(notes1, durations1 , melodyLength1);
+  }
 }
 
 void loop() {
-  
-    buzzer.playSound();
-    if (buttonOff.wasPressed())
-    {
-        buzzer.turnSoundOff();
+    for (int i = 0; i < countBuzzer; i++) {
+        buzzers[0].playSound();
+        buzzers[1].playSound();
     }
-}
-
-void print_rgb(colorData rgb)
-{
-  Serial.print(rgb.value[TCS230_RGB_R]);
-  Serial.print(" ");
-  Serial.print(rgb.value[TCS230_RGB_G]);
-  Serial.print(" ");
-  Serial.print(rgb.value[TCS230_RGB_B]);
-  Serial.println();
-}
-
-void set_rgb_led(colorData rgb)
-{
-    analogWrite(R_OUT, 255 - rgb.value[TCS230_RGB_R]);
-    analogWrite(G_OUT, 255 - rgb.value[TCS230_RGB_G]);
-    analogWrite(B_OUT, 255 - rgb.value[TCS230_RGB_B]);
+        
+    if (buttonOff.wasPressed()) {
+      f = (f+1) % countMelody;
+      for (int i = 0; i < countBuzzer; i++)
+      {
+          f == 1 ? buzzers[i].setMelody(notes2, durations2, melodyLength2) : buzzers[i].setMelody(notes1, durations1, melodyLength1);
+      }
+    }
 }

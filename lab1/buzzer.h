@@ -1,4 +1,5 @@
 #pragma once
+#include "pitches.h"
 
 #define BUZZER_NOTE_DURATION 100
 
@@ -43,9 +44,6 @@ public:
 
     void playSound()
     {
-        if (!isEnabled)
-            return;
-
         unsigned long duration = round(BUZZER_NOTE_DURATION*durations[currentNote]);
         if ((millis() - noteStartedMs) > duration)
         {

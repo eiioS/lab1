@@ -1,9 +1,6 @@
-/*************************************************
- * Public Constants
- *************************************************/
-
 #define NOTE_SILENCE 0
 
+#define REST     1
 #define NOTE_B0  31
 #define NOTE_C1  33
 #define NOTE_CS1 35
