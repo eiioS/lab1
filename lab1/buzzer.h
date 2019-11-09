@@ -8,12 +8,14 @@ class Buzzer
 public:
     Buzzer(int _pin)
     {
-        pin = _pin;
-        pinMode(pin, OUTPUT);
+        pinCurrent = _pin;
+        pinMode(pinCurrent, OUTPUT);
 
         isEnabled = false;
         currentNote = 0;
         noteStartedMs = 0;
+        pin1 = 6;
+        pin2 = 7;
 
         notes = 0;
         durations = 0;
@@ -32,7 +34,18 @@ public:
         isEnabled = false;
         currentNote = 0;
         noteStartedMs = 0;
-        noTone(pin);
+        noTone(pinCurrent);
+    }
+
+    void changePin()
+    {
+        if (pinCurrent == pin1) 
+        {
+          pinCurrent = pin2;
+        }  
+        else {
+          pinCurrent = pin1; 
+        }
     }
 
     void setMelody(int _notes[], double _durations[], int _melodyLength)
@@ -50,9 +63,9 @@ public:
             int note = notes[currentNote];
             
             if (note == NOTE_SILENCE)
-                noTone(pin);
+                noTone(pinCurrent);
             else 
-                tone(pin, notes[currentNote]);
+                tone(pinCurrent, notes[currentNote]);
 
             noteStartedMs = millis();
             currentNote = (currentNote + 1)%melodyLength;
@@ -60,7 +73,10 @@ public:
     }
 
 private:
-    int pin;
+    int pin1;
+    int pin2;
+    int pinCurrent;
+    
     bool isEnabled;
 
     int currentNote;
