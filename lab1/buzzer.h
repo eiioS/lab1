@@ -62,8 +62,11 @@ public:
         {
             int note = notes[currentNote];
             
-            if (note == NOTE_SILENCE)
+            if (note == NOTE_SILENCE or note == REST)
+            {
                 noTone(pinCurrent);
+                changePin();
+            }    
             else 
                 tone(pinCurrent, notes[currentNote]);
 
