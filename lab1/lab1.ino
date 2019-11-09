@@ -15,7 +15,7 @@ int notes1[] = {NOTE_A4, NOTE_SILENCE, NOTE_G4, NOTE_SILENCE};
 double durations1[] = {8, 1, 4, 1};
 int melodyLength1 = 4;
 int currentMelody = 0;
-int countMelody = 2;
+int countMelody = sizeof(durations1)/sizeof(durations1[0]);
 
 int notes2[] = {NOTE_E4, NOTE_E4, REST, NOTE_E4, 
   REST, NOTE_C4, NOTE_E4, REST,
@@ -41,7 +41,7 @@ double durations2[] = {
   4, 4, 4, 4, 
   4, 4, 2
   };
-int melodyLength2 = 42;
+int melodyLength2 = sizeof(durations2)/sizeof(durations2[0]);
 
 void setup() {
   buzzer.setMelody(notes1, durations1 , melodyLength1);
